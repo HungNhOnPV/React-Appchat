@@ -4,7 +4,7 @@
       ".read": "auth != null",
       "$channelId": {
         ".write": "auth != null",
-        ".validate": "newData.hasChildren(['id', 'name', 'createBy', 'details'])",
+        ".validate": "newData.hasChildren(['id', 'name', 'createdBy', 'details'])",
         "id": {
           ".validate": "newData.val() === $channelId"
         },
@@ -35,7 +35,7 @@
         }
       }
     },
-    "privateMassages": {
+    "privateMessages": {
       "$uid1": {
         "$uid2": {
           ".read": "auth != null && ($uid1 === auth.uid || $uid2 === auth.uid)",
