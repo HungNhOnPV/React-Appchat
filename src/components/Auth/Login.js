@@ -7,6 +7,7 @@ class Login extends React.Component {
     state = {
         email: '',
         password: '',
+        displayName: '',
         errors: [],
         loading: false
     }
@@ -47,6 +48,28 @@ class Login extends React.Component {
             : ''
     }
 
+    authenticate = provider => {
+        console.log(provider);
+        const authProvider = new firebase.auth[`${provider}AuthProvider`]();
+        firebase
+          .auth()
+          .signInWithPopup(authProvider)
+          .then(this.authHandler)
+          .catch(err => {
+            console.log(err);
+            this.setState({ errors: this.state.errors.concat(err), loading: false });
+        });
+      };
+     
+    // xử lý sau khi xác thực
+     authHandler = async authData => {
+        const user = authData.user;
+        this.setState({
+          email: user.email,
+          displayName: user.displayName
+        });
+      };
+
     render() {
         const { email, password, errors, loading } = this.state;
         return(
@@ -66,6 +89,7 @@ class Login extends React.Component {
                             placeholder="Password" onChange={this.handleChange} value={password} className={this.handleInputError(errors, 'password')} type="password"/>
 
                             <Button disabled={loading} className={ loading ? 'loading' : '' } color="violet" fluid size="large">Submit</Button>
+                            <Button type="button" disabled={loading} className={ loading ? 'loading' : '' } color="primary" fluid size="large" style={{marginTop: '10px'}} onClick={() => this.authenticate("Facebook")}>Facebook Login</Button>
                         </Segment>
                     </Form>
                     {errors.length > 0 && (<Message error>
