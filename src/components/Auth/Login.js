@@ -9,7 +9,8 @@ class Login extends React.Component {
         password: '',
         displayName: '',
         errors: [],
-        loading: false
+        loading: false,
+        usersRef: firebase.database().ref('users')
     }
 
     displayErrors = errors => errors.map((error, i) => <p key={i}>{error.message}</p>);
@@ -62,13 +63,23 @@ class Login extends React.Component {
       };
      
     // xử lý sau khi xác thực
-     authHandler = async authData => {
+    authHandler = async authData => {
         const user = authData.user;
         this.setState({
           email: user.email,
           displayName: user.displayName
         });
+        this.saveUser(user).then(() => {
+            console.log('user save');
+        })
       };
+
+    saveUser = user => {
+        return this.state.usersRef.child(user.uid).set({
+            name: user.displayName,
+            avatar: user.photoURL
+        });
+    }
 
     render() {
         const { email, password, errors, loading } = this.state;
