@@ -16,6 +16,10 @@ export const clearUser = () => {
     }
 }
 
+export const helloWorld = () => {
+    console.log('Hello World!')
+}
+
 /* Channel Action */
 export const setCurrentChannel = channel => {
     return {
